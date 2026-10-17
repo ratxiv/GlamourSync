@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
+  <PropertyGroup>
+    <Version>1.0.0.0</Version>
+    <Author>Rat</Author>
+    <Name>GlamourSync</Name>
+    <Punchline>Preview an Eorzea Collection glamour and apply it through Glamourer.</Punchline>
+    <Description>Preview an Eorzea Collection glamour and apply it through Glamourer.</Description>
+    <RepoUrl>https://github.com/ratxiv/GlamourSync</RepoUrl>
+    <Tags>glamour;glamourer;eorzea collection;gear;appearance</Tags>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Glamourer.Api" Version="2.8.2" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\NoFacewear.png" LogicalName="NoFacewear.png" />
+  </ItemGroup>
+</Project>

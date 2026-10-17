@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="GlamourSync/GlamourSync.csproj">
+    <Platform Project="x64" />
+  </Project>
+</Solution>
