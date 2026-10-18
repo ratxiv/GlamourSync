@@ -50,7 +50,7 @@ public static class EorzeaCollectionScraper
             if (slot == null) continue;
 
             // Dyes: each .tag in the description, e.g. "⬤ Metallic Silver"
-            var dyes = new List<string>();
+            var dyes = new List<string?>();   // one entry per dye channel; null = that channel is undyed
             var tags = row.SelectNodes(".//div[contains(@class,'list-item-description')]//div[contains(@class,'tag')]");
             if (tags != null)
                 foreach (var t in tags)
@@ -60,11 +60,21 @@ public static class EorzeaCollectionScraper
                     // Real dye tags carry the colored "⬤" marker. Other tags (for example "Online Store Exclusive")
                     // must not take up a dye slot, or they push the second dye out.
                     var isDye = raw.Contains('⬤') || t.SelectSingleNode(".//*[contains(@class,'has-text-dye')]") != null;
-                    if (!isDye) continue;
 
-                    var d = raw.Replace("⬤", "").Trim();
-                    if (d.Length == 0 || d.Equals("Online Store Exclusive", StringComparison.OrdinalIgnoreCase)) continue;
-                    dyes.Add(d);
+                    // An unused channel is shown as "○ Undyed". It still holds its place, so a dye in the SECOND
+                    // channel is not moved into the first one.
+                    var isUndyed = !isDye && (raw.Contains('○') || raw.Contains("Undyed", StringComparison.OrdinalIgnoreCase));
+
+                    if (isDye)
+                    {
+                        var d = raw.Replace("⬤", "").Trim();
+                        if (d.Length == 0 || d.Equals("Online Store Exclusive", StringComparison.OrdinalIgnoreCase)) continue;
+                        dyes.Add(d);
+                    }
+                    else if (isUndyed)
+                    {
+                        dyes.Add(null);
+                    }
                 }
 
             pieces.Add(new GlamourPiece(slot, name,
@@ -108,7 +118,6 @@ public static class EorzeaCollectionScraper
         return result;
     }
 
-    
     public static string ExtractTitle(string html)
     {
         var m = Regex.Match(html, @"<title>\s*(.*?)\s*\|\s*Eorzea Collection", RegexOptions.Singleline);
